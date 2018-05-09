@@ -23,8 +23,8 @@ const config = {
     "adminRole": "Administrator",
     "systemNotice": "true", // This gives a notice when a user tries to run a command that they do not have permission to use.
     "welcomeChannel": "welcome",
-    "welcomeMessage": "Say hello to {{user}}, everyone! We all need a warm welcome sometimes :D",
-    "welcomeEnabled": "false"
+    "welcomeMessage": "Teretulemast, Välkommen, Tervetuloa, Welcome {{user}}! :fire::fire::fire:",
+    "welcomeEnabled": "true"
   },
 
   // PERMISSION LEVEL DEFINITIONS.
