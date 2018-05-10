@@ -1,63 +1,52 @@
 const {
     google
 } = require('googleapis');
-const readline = require('readline');
-const OAuth2Client = google.auth.OAuth2;
-const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
-const TOKEN_PATH = 'credentials/google-active-credentials.json';
+const JWT_TOKEN_PATH = 'credentials/google-jwt-token.json';
 const fs = require('fs')
 
 /**
- * Create an OAuth2 client with the given credentials, and then execute the
+ * Create an JWTClient with the given credentials, and then execute the
  * given callback function.
- * @param {Object} credentials The authorization client credentials.
+ * @param {Object} service_account The authorization client credentials.
  * @param {function} callback The callback to call with the authorized client.
  * @return {function} if error in reading credentials.json asks for a new one.
  */
-function authorize(credentials, callback) {
+function authorized(service_account, callback) {
     let token = {};
-    const oAuth2Client = new OAuth2Client(credentials.client_id, credentials.client_secret, credentials.redirect_uris);
+    const jwtClient = new  google.auth.JWT(
+        service_account.client_email,
+        null,
+        service_account.private_key, ['https://www.googleapis.com/auth/calendar']);
 
-    // Check if we have previously stored a token.
+            // Check if we have previously stored a token.
     try {
-        token = fs.readFileSync(TOKEN_PATH);
+        token = JSON.parse(fs.readFileSync(JWT_TOKEN_PATH));
+        if(token.expiry_date <= new Date().getTime()) {
+            throw "Expired token!";
+        } else {
+            jwtClient.setCredentials(token)
+            callback(jwtClient)
+        }
     } catch (err) {
-        return getAccessToken(oAuth2Client, callback);
+        getAccessToken(jwtClient, callback);
     }
-    oAuth2Client.setCredentials(JSON.parse(token));
-    callback(oAuth2Client);
-}
 
+}
 /**
  * Get and store new token after prompting for user authorization, and then
  * execute the given callback with the authorized OAuth2 client.
  * @param {google.auth.OAuth2} oAuth2Client The OAuth2 client to get token for.
  * @param {getEventsCallback} callback The callback for the authorized client.
  */
-function getAccessToken(oAuth2Client, callback) {
-    const authUrl = oAuth2Client.generateAuthUrl({
-        access_type: 'offline',
-        scope: SCOPES,
-    });
-    console.log('Authorize this app by visiting this url:', authUrl);
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-    });
-    rl.question('Enter the code from that page here: ', (code) => {
-        rl.close();
-        oAuth2Client.getToken(code, (err, token) => {
-            if (err) return callback(err);
-            oAuth2Client.setCredentials(token);
-            // Store the token to disk for later program executions
-            try {
-                fs.writeFileSync(TOKEN_PATH, JSON.stringify(token));
-                console.log('Token stored to', TOKEN_PATH);
-            } catch (err) {
-                console.error(err);
-            }
-            callback(oAuth2Client);
-        });
+function getAccessToken(jwtClient, callback) {
+    jwtClient.authorize(function (err, tokens) {
+        if (err) {
+            console.log(err); // TODO Logging
+        } else {
+            fs.writeFileSync(JWT_TOKEN_PATH, JSON.stringify(tokens));            
+            jwtClient.setCredentials(tokens)
+            callback(jwtClient);;
+        }
     });
 }
 
@@ -92,13 +81,13 @@ function listEvents(auth, sink) {
         }
     });
 }
-
 module.exports.upcoming = (sink) => {
-    const credentials = require('../credentials/google-credentials.json')
-    return authorize(credentials, (auth) => {
+    const credentials = require('../credentials/google-service-account.json')
+    return authorized(credentials, (auth) => {
         listEvents(auth, sink)
     });
 }
+
 
 //const credentials = require('../credentials/google-credentials.json')
 //authorize(credentials, (auth) => console.log(auth));
