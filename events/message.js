@@ -4,7 +4,7 @@
 
 module.exports = (client, message) => {
   var parsedContent = message.content;
-  if (message.isMentioned(client.user)) {
+  if (message.isMentioned(client.user) && message.content.contains(" ")) {
     parsedContent = message.content.split(" ")[1]
   }
   // It's good practice to ignore other bots. This also makes your bot ignore itself
