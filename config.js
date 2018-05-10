@@ -1,6 +1,8 @@
+const credentials = require("./credentials/credentials.json")
+
 const config = {
   // Bot Owner, level 10 by default. A User ID. Should never be anything else than the bot owner's ID.
-  "ownerID": "134787888209592331",
+  "ownerID": credentials.ownerId,
 
   // Bot Admins, level 9 by default. Array of user ID strings.
   "admins": [],
@@ -9,7 +11,7 @@ const config = {
   "support": [],
 
   // Your Bot's Token. Available on https://discordapp.com/developers/applications/me
-  "token": "NDQzODQ1MTAxMDA1ODMyMTky.DdTnFg.J52NU-BuBGA4hQ5WRFdlWzzFFxc",
+  "token": credentials.token,
 
   // Default per-server settings. New guilds have these settings. 
 
