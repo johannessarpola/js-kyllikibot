@@ -1,7 +1,7 @@
 exports.run = async (client, message, args, level) => { // eslint-disable-line no-unused-vars
     const msg = await message.channel.send(
         "Kasuarbird", {
-            file: "https://imgur.com/TRQ3rtA"
+            file: "https://i.imgur.com/TRQ3rtA.jpg"
         }
     );
 };
