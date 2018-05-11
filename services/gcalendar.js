@@ -13,15 +13,15 @@ const fs = require('fs')
  */
 function authorized(service_account, callback) {
     let token = {};
-    const jwtClient = new  google.auth.JWT(
+    const jwtClient = new google.auth.JWT(
         service_account.client_email,
         null,
         service_account.private_key, ['https://www.googleapis.com/auth/calendar']);
 
-            // Check if we have previously stored a token.
+    // Check if we have previously stored a token.
     try {
         token = JSON.parse(fs.readFileSync(JWT_TOKEN_PATH));
-        if(token.expiry_date <= new Date().getTime()) {
+        if (token.expiry_date <= new Date().getTime()) {
             throw "Expired token!";
         } else {
             jwtClient.setCredentials(token)
@@ -43,7 +43,7 @@ function getAccessToken(jwtClient, callback) {
         if (err) {
             console.log(err); // TODO Logging
         } else {
-            fs.writeFileSync(JWT_TOKEN_PATH, JSON.stringify(tokens));            
+            fs.writeFileSync(JWT_TOKEN_PATH, JSON.stringify(tokens));
             jwtClient.setCredentials(tokens)
             callback(jwtClient);;
         }
@@ -54,7 +54,7 @@ function getAccessToken(jwtClient, callback) {
  * Lists the next 10 events on the user's primary calendar.
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
-function listEvents(auth, sink) {
+function listEvents(auth, callback) {
     const calendar = google.calendar({
         version: 'v3',
         auth
@@ -74,17 +74,47 @@ function listEvents(auth, sink) {
             events.map((event, i) => {
                 const start = event.start.dateTime || event.start.date;
                 let evt = `${start} - ${event.summary}`
-                sink(evt)
+                callback(evt)
             });
         } else {
-            sink('No upcoming events found.');
+            callback('No upcoming events found.');
         }
     });
 }
-module.exports.upcoming = (sink) => {
+
+
+/**
+ * Lists the next 10 events on the user's primary calendar.
+ * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
+ */
+function createEvent(auth, event, callback) {
+    const calendar = google.calendar({
+        version: 'v3',
+        auth
+    });
+
+    calendar.events.insert({
+        calendarId: '39aesjke4pr0spvelmbvfgevkc@group.calendar.google.com', // TODO Add configure
+        resource: event
+    }, (err, {
+        data
+    }) => {
+        callback(data);
+    });
+
+}
+
+module.exports.upcoming = (callback) => {
     const credentials = require('../credentials/google-service-account.json')
     return authorized(credentials, (auth) => {
-        listEvents(auth, sink)
+        listEvents(auth, callback)
+    });
+}
+
+module.exports.insert = (event, callback) => {
+    const credentials = require('../credentials/google-service-account.json')
+    return authorized(credentials, (auth) => {
+        createEvent(auth, event, callback)
     });
 }
 
