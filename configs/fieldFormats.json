@@ -1,0 +1,10 @@
+{
+    "events" : {
+        "nameDelimeters" : [
+            ":"
+        ],
+        "namePrefixes" : [
+            "Name", "Nimi", "N"
+        ]
+    } 
+}
