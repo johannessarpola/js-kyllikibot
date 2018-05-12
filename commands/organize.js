@@ -11,6 +11,7 @@ const parseTimeAndDuration = (args) => {
     args.forEach(arg => {
         // Hour 
         if ((arg.length == 4 || arg.length == 5) && time == null) {
+            // TODO This adds +3 hours because of TimeZone to the hours
             time = timeParse.tryParseTime(arg);
             if(time !== null) {
                 usedArgs.push(arg)
@@ -47,6 +48,7 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
         remainingArgs
     } = parseTimeAndDuration(args)
 
+    // TODO This adds +3 hours because of TimeZone to the hours
     date.setHours(time.getHours());
     date.setMinutes(time.getMinutes());
 
