@@ -4,7 +4,7 @@
   "description": "A boilerplate example bot with command handler and reloadable commands. Updated and Maintained by the Idiot's Guide Community",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "node index.js",
     "debug": "node --nolazy --inspect-brk=9229 index.js"
   },
@@ -32,5 +32,9 @@
     "googleapis": "^30.0.0",
     "moment": "^2.20.1",
     "moment-duration-format": "^2.2.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "jest": "^22.4.3"
   }
 }

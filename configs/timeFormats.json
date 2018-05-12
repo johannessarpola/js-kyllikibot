@@ -1,0 +1,12 @@
+{
+    "dateFormats" : [
+        "DD.MM.YYYY", "DD.M.YYYY", "D.M.YYYY",
+        "DD-MM-YYYY", "DD-M-YYYY", "D-M-YYYY"
+    ],
+    "timeFormats" : [
+        "HHmm", "HH:mm", "HH.mm"
+    ],
+    "dateTimeFormats" : [
+        "DDMMYYYYHHmm", "DD.MM.YYYYTHHmm"
+    ]
+}
