@@ -1,5 +1,7 @@
 const timeParse = require('../util/timeParse');
 const eventFormats = require('../configs/fieldFormats.json').events;
+const gcal = require('../services/gcalendar')
+const gevents = require('../models/gevents')
 
 const parseTimeAndDuration = (args) => {
     let time = null;
@@ -38,9 +40,6 @@ const addDuration = (date, duration) => {
 }
 
 exports.run = async (client, message, args, level) => { // eslint-disable-line no-unused-vars
-    const gcal = require('../services/gcalendar')
-    const gevents = require('../models/gevents')
-
     const {
         time,
         date,
@@ -53,7 +52,7 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
 
     const eventStart = gevents.createTime(date)
     const eventEnd = gevents.createTime(addDuration(date, duration))
-
+6
      // TODO Handle description or title?
     const event = gevents.createSimpleEvent(remainingArgs.join(" "), eventStart, eventEnd, "");
     const upcoming = gcal.insert(event, data => {
