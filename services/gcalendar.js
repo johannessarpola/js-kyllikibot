@@ -71,10 +71,8 @@ function listEvents(auth, callback) {
         if (err) return console.log('The API returned an error: ' + err); // TODO Use logging
         const events = data.items;
         if (events.length) {
-            events.map((event, i) => {
-                const start = event.start.dateTime || event.start.date;
-                let evt = `${start} - ${event.summary} (${event.id})`
-                callback(evt)
+            events.forEach((event, i) => {
+                callback(event)
             });
         } else {
             callback('No upcoming events found.');
