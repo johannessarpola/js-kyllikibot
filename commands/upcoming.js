@@ -8,6 +8,7 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
     const upcoming = gcal.upcoming((event => {
         // TODO Handle date format as well
         // FIXME Handle no events
+        // FIXME endMoment timeFormat uses UTC
         const startMoment =  moment(event.start.dateTime || event.start.date);
         const endMoment = moment(event.end.dateTime || event.start.date)
         let evt = `${startMoment.format(dateTimeFormat)} - ${endMoment.format(timeFormat)} : ${event.summary} (${event.id})`
