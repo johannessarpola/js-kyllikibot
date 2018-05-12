@@ -73,7 +73,7 @@ function listEvents(auth, callback) {
         if (events.length) {
             events.map((event, i) => {
                 const start = event.start.dateTime || event.start.date;
-                let evt = `${start} - ${event.summary}`
+                let evt = `${start} - ${event.summary} (${event.id})`
                 callback(evt)
             });
         } else {
