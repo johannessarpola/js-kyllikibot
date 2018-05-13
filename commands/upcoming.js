@@ -7,7 +7,7 @@ const timeFormat = formats.generalTimeFormat;
 const formatEvent = (event) => {
 
     const startMoment =  moment(event.start.dateTime || event.start.date);
-    const endMoment = moment(event.end.dateTime || event.start.date)
+    const endMoment = moment(event.end.dateTime || event.end.date)
 
     let base = eventFormat;
     base = base.replace("{{date}}", startMoment.format(dateFormat))
