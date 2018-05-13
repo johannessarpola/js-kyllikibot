@@ -12,7 +12,7 @@ const formatEvent = (event) => {
     let base = eventFormat;
     base = base.replace("{{date}}", startMoment.format(dateFormat))
     base = base.replace("{{startTime}}", startMoment.format(timeFormat))
-    base = base.replace("{{endTime}}", startMoment.format(timeFormat))
+    base = base.replace("{{endTime}}", endMoment.format(timeFormat))
     base = base.replace("{{timeZone}}", startMoment.format('Z'))
     base = base.replace("{{summary}}", event.summary)
     base = base.replace("{{description}}", event.description || "")
