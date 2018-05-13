@@ -1,25 +1,14 @@
-// This will check if the node version you are running is the required
-// Node version, if it isn't it will throw the following error to inform
-// you.
+// This will check if the node version you are running is the required one
 if (process.version.slice(1).split(".")[0] < 8) throw new Error("Node 8.0.0 or higher is required. Update Node on your system.");
 
-// Load up the discord.js library
 const Discord = require("discord.js");
-// We also load the rest of the things we need in this file:
 const { promisify } = require("util");
 const readdir = promisify(require("fs").readdir);
 const Enmap = require("enmap");
 const EnmapLevel = require("enmap-level");
 
-// This is your client. Some people call it `bot`, some people call it `self`,
-// some might call it `cootchie`. Either way, when you see `client.something`,
-// or `bot.something`, this is what we're refering to. Your client.
 const client = new Discord.Client();
-
-// Here we load the config file that contains our token and our prefix values.
 client.config = require("./config.js");
-// client.config.token contains the bot's token
-// client.config.prefix contains the message prefix
 
 // Require our logger
 client.logger = require("./util/Logger");
@@ -43,8 +32,7 @@ client.settings = new Enmap({provider: new EnmapLevel({name: "settings"})});
 
 const init = async () => {
 
-  // Here we load **commands** into memory, as a collection, so they're accessible
-  // here and everywhere else.
+  // Here we load **commands** into memory, as a collection, so they're accessible here and everywhere else.
   const cmdFiles = await readdir("./commands/");
   client.logger.log(`Loading a total of ${cmdFiles.length} commands.`);
   cmdFiles.forEach(f => {
@@ -71,12 +59,7 @@ const init = async () => {
     client.levelCache[thisLevel.name] = thisLevel.level;
   };
 
-  // Here we login the client.
   client.login(client.config.token);
-
-// End top-level async/await function.
 };
-
-
 
 init();

@@ -1,7 +1,7 @@
 {
-  "name": "guidebot",
-  "version": "2.3.5",
-  "description": "A boilerplate example bot with command handler and reloadable commands. Updated and Maintained by the Idiot's Guide Community",
+  "name": "kyllikki",
+  "version": "0.1.0",
+  "description": "General purpose bot",
   "main": "index.js",
   "scripts": {
     "test": "jest",
@@ -11,19 +11,8 @@
   "engines": {
     "node": ">=8"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/An-Idiots-Guide/guidebot.git"
-  },
-  "author": "Evelyne Lachance <eslachance@gmail.com> (http://evie.codes)",
-  "contributors": [
-    "York (http://anidiots.guide)"
-  ],
+  "author": "Johannes Sarpola",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/An-Idiots-Guide/guidebot/issues"
-  },
-  "homepage": "https://github.com/An-Idiots-Guide/guidebot#readme",
   "dependencies": {
     "chalk": "^2.3.0",
     "discord.js": "^11.3.2",
