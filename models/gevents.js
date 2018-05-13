@@ -20,13 +20,14 @@ module.exports.createOrganizer = ( id, email, displayName) => {
 module.exports.createTime = (datetime, timezone = "") => {
   let time = {
     dateTime : datetime.toJSON(),
+    timeZone : "UTC"
   }
-  if(timezone.length == 0) {
+  /*if(timezone.length == 0) {
     time.timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   }
   else {
     time.timeZone = timezone;
-  }
+  }*/
   return time;
 };
 

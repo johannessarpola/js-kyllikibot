@@ -10,5 +10,6 @@
         "DDMMYYYYHHmm", "DD.MM.YYYYTHHmm"
     ],
     "generalFormat" : "D.M.YYYY HHmm",
-    "timeFormat" : "HHmm"
+    "generalTimeFormat" : "HHmm",
+    "generalDateFormat" : "D.M.YYYY"
 }

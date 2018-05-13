@@ -1,0 +1,3 @@
+{
+    "eventFormat" : "{{date}} {{startTime}}-{{endTime}} ({{timeZone}}) {{summary}} {{description}} ({{id}})"
+}
