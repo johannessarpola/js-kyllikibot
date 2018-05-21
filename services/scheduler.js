@@ -1,7 +1,6 @@
 const scheduler = require('node-schedule');
 
 module.exports.runTask = (client, task, schedule, schedulerSettings) => {
-    // TODO Channel?
     const settings = client.getGuildSettings(schedulerSettings.guildId);
     const f = () => {
         const guild = client.guilds.get(schedulerSettings.guildId);
