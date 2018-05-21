@@ -2,6 +2,7 @@
 if (process.version.slice(1).split(".")[0] < 8) throw new Error("Node 8.0.0 or higher is required. Update Node on your system.");
 
 const Discord = require("discord.js");
+const scheduling = require("./services/scheduler");
 const { promisify } = require("util");
 const readdir = promisify(require("fs").readdir);
 const Enmap = require("enmap");
@@ -21,14 +22,13 @@ require("./modules/functions.js")(client);
 // catalogued, listed, etc.
 client.commands = new Enmap();
 client.aliases = new Enmap();
+client.tasks = new Enmap();
+
 
 // Now we integrate the use of Evie's awesome Enhanced Map module, which
 // essentially saves a collection to disk. This is great for per-server configs,
 // and makes things extremely easy for this purpose.
 client.settings = new Enmap({provider: new EnmapLevel({name: "settings"})});
-
-// We're doing real fancy node 8 async/await stuff here, and to do that
-// we need to wrap stuff in an anonymous function. It's annoying but it works.
 
 const init = async () => {
 
@@ -59,7 +59,24 @@ const init = async () => {
     client.levelCache[thisLevel.name] = thisLevel.level;
   };
 
-  client.login(client.config.token);
+  const schedulerSettings = {
+    guildId : "134603873187921920",
+    channelId : "134603873187921920"
+  }
+
+  const taskFiles = await readdir("./scheduled/");
+
+  taskFiles.forEach(f => {
+    if (!f.endsWith(".js")) return;
+    const response = client.loadScheduledTask(f);
+    if (response) console.log(response);
+  });
+
+  client.login(client.config.token).then( () => {
+    client.tasks.forEach( (task) => {
+      scheduling.runTask(client, task, "", schedulerSettings);
+    });
+  });
 };
 
 init();

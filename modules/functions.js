@@ -107,6 +107,20 @@ module.exports = (client) => {
     }
   };
 
+  client.loadScheduledTask = (task) => {
+    try {
+      const props = require(`../scheduled/${task}`);
+      client.logger.log(`Loading scheduled task: ${props.help.name}. 👌`);
+      if (props.init) {
+        props.init(client);
+      }
+      client.tasks.set(props.help.name, props);
+      return false;
+    } catch (e) {
+      return `Unable to load scheduled task ${task}: ${e}`;
+    }
+  };
+
   client.unloadCommand = async (commandName) => {
     let command;
     if (client.commands.has(commandName)) {
