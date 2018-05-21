@@ -75,7 +75,7 @@ function listEvents(auth, callback) {
                 callback(event)
             });
         } else {
-            callback('No upcoming events found.');
+            callback({ err: 'No upcoming events found.' });
         }
     });
 }
