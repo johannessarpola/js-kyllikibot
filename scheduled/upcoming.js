@@ -5,6 +5,7 @@ exports.run = async (client, channel, args) => { // eslint-disable-line no-unuse
     const gcal = require('../services/gcalendar')
     gcal.upcoming(event => {
         if(event.err) {
+            client.logger.log(`No upcoming events. 🤷‍♂️`);
             return
         }
         else {
