@@ -3,15 +3,15 @@ const formatEvent = require("../util/eventParse").formatEvent
 
 exports.run = async (client, channel, args) => { // eslint-disable-line no-unused-vars
     const gcal = require('../services/gcalendar')
-    const upcoming = gcal.upcoming(event => {
+    gcal.upcoming(event => {
         if(event.err) {
-            channel.send(event.err)
+            return
         }
         else {
             const evt = formatEvent(event)
-            channel.send(evt)}
+            channel.send(evt)
         }
-    )
+    })
 };
 
 exports.help = {
