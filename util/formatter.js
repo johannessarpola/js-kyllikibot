@@ -1,10 +1,11 @@
 const moment = require('moment');
 const formats = require('../configs/timeFormats.json');
-const eventFormat = require('../configs/modelFormats.json').eventFormat;
+const eventFormat = require('../configs/modelFormats.json').event.formats[0];
+const formatFormat = require('../configs/modelFormats.json').format.formats[0];
 const dateFormat = formats.generalDateFormat;
 const timeFormat = formats.generalTimeFormat;
 
-module.exports.formatEvent = (event) => {
+module.exports.event = (event) => {
 
     const startMoment =  moment(event.start.dateTime || event.start.date);
     const endMoment = moment(event.end.dateTime || event.end.date)
@@ -20,5 +21,13 @@ module.exports.formatEvent = (event) => {
 
     base = base.replace("  ", " ");
 
+    return base;
+}
+
+module.exports.formatField = (fmt, ordering = 1) => {
+    let base = formatFormat;
+    base = base.replace("{{description}}", fmt.description)
+    base = base.replace("{{examples}}", fmt.examples)
+    base = base.replace("  ", " ");
     return base;
 }

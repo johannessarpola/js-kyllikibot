@@ -12,7 +12,7 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
   
   exports.help = {
     name: "tori",
-    category: "Miscelaneous",
+    category: "Misc",
     description: "Torille",
     usage: "tori"
   };

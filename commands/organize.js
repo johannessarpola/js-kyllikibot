@@ -73,6 +73,6 @@ exports.conf = {
 exports.help = {
     name: "organize",
     category: "Events",
-    description: "Create event",
-    usage: "organize"
+    description: "Create event, formats can be retrieved with command -formats",
+    usage: "organize <date> <time> <title>"
 };
