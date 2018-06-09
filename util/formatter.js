@@ -16,8 +16,9 @@ module.exports.event = (event) => {
     base = base.replace("{{endTime}}", endMoment.format(timeFormat))
     base = base.replace("{{timeZone}}", startMoment.format('Z'))
     base = base.replace("{{summary}}", event.summary)
-    base = base.replace("{{description}}", event.description || "")
+    // base = base.replace("{{description}}", event.description || "")
     base = base.replace("{{id}}", event.id)
+    base = base.replace("{{attendees}}", event.description.split(",").join(", "))
 
     base = base.replace("  ", " ");
 

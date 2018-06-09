@@ -3,6 +3,15 @@ const {
 } = require('googleapis');
 const JWT_TOKEN_PATH = 'credentials/google-jwt-token.json';
 const fs = require('fs')
+const calendarId = '39aesjke4pr0spvelmbvfgevkc@group.calendar.google.com'
+
+
+function calendarInstance(auth) {
+    return google.calendar({
+        version: 'v3',
+        auth
+    });
+}
 
 /**
  * Create an JWTClient with the given credentials, and then execute the
@@ -28,6 +37,7 @@ function authorized(service_account, callback) {
             callback(jwtClient)
         }
     } catch (err) {
+
         getAccessToken(jwtClient, callback);
     }
 
@@ -55,12 +65,9 @@ function getAccessToken(jwtClient, callback) {
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
 function listEvents(auth, callback) {
-    const calendar = google.calendar({
-        version: 'v3',
-        auth
-    });
+    const calendar = calendarInstance(auth);
     calendar.events.list({
-        calendarId: '39aesjke4pr0spvelmbvfgevkc@group.calendar.google.com',
+        calendarId: calendarId,
         timeMin: (new Date()).toISOString(),
         maxResults: 10,
         singleEvents: true,
@@ -75,7 +82,9 @@ function listEvents(auth, callback) {
                 callback(event)
             });
         } else {
-            callback({ err: 'No upcoming events found.' });
+            callback({
+                err: 'No upcoming events found.'
+            });
         }
     });
 }
@@ -86,13 +95,10 @@ function listEvents(auth, callback) {
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
 function createEvent(auth, event, callback) {
-    const calendar = google.calendar({
-        version: 'v3',
-        auth
-    });
+    const calendar = calendarInstance(auth);
 
     calendar.events.insert({
-        calendarId: '39aesjke4pr0spvelmbvfgevkc@group.calendar.google.com', // TODO Add configure
+        calendarId: calendarId,
         resource: event
     }, (err, {
         data
@@ -100,6 +106,48 @@ function createEvent(auth, event, callback) {
         callback(data);
     });
 
+}
+
+function update(auth, event, callback) {
+    const calendar = calendarInstance(auth);
+    calendar.events.update({
+        calendarId: calendarId,
+        eventId: event.id,
+        resource: event
+    }, (err, {
+        data
+    }) => {
+        callback(data);
+    });
+}
+
+function get(auth, id, callback) {
+    const calendar = calendarInstance(auth);
+    calendar.events.get({
+        calendarId: calendarId,
+        eventId: id
+    }, (err, {
+        data
+    }) => {
+        callback(data);
+    });
+}
+
+module.exports.participate = (id, name, callback) => {
+    const credentials = require('../credentials/google-service-account.json')
+    return authorized(credentials, (auth) => {
+        get(auth, id, (event) => {
+            const sanitizedName = name.replace(",", " ");
+            const split = event.description ? event.description.split(",") : [];
+            if(split.includes(sanitizedName)) {
+                callback(event);
+            }
+            else {
+                event.description = event.description != null ? event.description + `,${sanitizedName}` : sanitizedName
+                update(auth, event, callback)
+            }
+        });
+    });
 }
 
 module.exports.upcoming = (callback) => {
