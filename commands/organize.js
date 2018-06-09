@@ -74,5 +74,5 @@ exports.help = {
     name: "organize",
     category: "Events",
     description: "Create event, formats can be retrieved with command -formats",
-    usage: "organize <date> <time> <title>"
+    usage: "organize [date] [time] [title]"
 };
