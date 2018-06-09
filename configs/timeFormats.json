@@ -17,7 +17,7 @@
         "generatedExamples" : true
     },
     "dateTime" : {
-        "title" : "Date and time",
+        "title" : "DateTime",
         "description" : "You can see in what format bot accepts dates and times in a single token in examples below.",
         "formats" : [ "DDMMYYYYHHmm", "DD.MM.YYYYTHHmm" ],
         "visibility" : "user",
@@ -27,5 +27,6 @@
     "generalFormat" : "D.M.YYYY HHmm",
     "generalTimeFormat" : "HHmm",
     "generalDateFormat" : "D.M.YYYY",
-    "visibility" : "user"
+    "visibility" : "user",
+    "category" : "Date and time"
 }

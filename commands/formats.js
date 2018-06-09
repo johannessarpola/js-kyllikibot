@@ -1,6 +1,6 @@
 const fsUtil = require("../util/files");
 const formatFolder = "configs";
-const simpleEmbedGen = require("../util/embed").generateTextEmbed
+const simpleEmbedGen = require("../util/embed").generateTextEmbedFromMap
 const formatFormat = require("../util/formatter").formatFormat;
 const genDateTimeExamples = require("../util/timeParse").generateExamples
 const _ = require('lodash');
@@ -16,6 +16,7 @@ function buildFormats(jsons) {
         return filter(Object.values(fmts)).map(fmt => {
             const examples = fmt.generatedExamples ? createExamples(fmt) : fmt.examples
             return {
+                category: fmts.category,
                 title: fmt.title,
                 description: fmt.description,
                 examples: examples
@@ -33,16 +34,21 @@ function createExamples(fmt) {
     }
 }
 
-function createMessage(formats) {
+function createMessage(formats, categoryExtractor = fmt => fmt.category ) {
     let msg  = "";
     let incr = 1;
-    formats.forEach(f =>{
-        const title = `${incr}. ${f.title}`
-        msg += formatFormat(f, title);
-        msg += "\n\n"
-        incr += 1;
+
+    const map = new Map();
+    formats.forEach((fmt) => {
+        const category = categoryExtractor(fmt);
+        const field = map.get(category);
+
+        const title = `${fmt.title}`
+        const msg = `${formatFormat(fmt, title)}\n\n`;
+        map.set(category, field ? field + msg : msg)
     });
-    return simpleEmbedGen( { "\u200B" : msg }, 
+
+    return simpleEmbedGen( map, 
         title = "Formats accepted by the bot" );
 }
 
