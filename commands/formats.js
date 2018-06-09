@@ -1,8 +1,8 @@
 const fsUtil = require("../util/files");
 const formatFolder = "configs";
 const simpleEmbedGen = require("../util/embed").generateTextEmbed
-const formatFieldFormatter = require("../util/formatter").formatField;
-const genExamples = require("../util/timeParse").generateExamples
+const formatFormat = require("../util/formatter").formatFormat;
+const genDateTimeExamples = require("../util/timeParse").generateExamples
 const _ = require('lodash');
 const splitChar = "\u200b";
 
@@ -14,7 +14,7 @@ function buildFormats(jsons) {
     const objs = Object.values(jsons)
     return _.flatten(filter(objs).map(fmts => {
         return filter(Object.values(fmts)).map(fmt => {
-            const examples = genExamples(fmt.formats).examples.join(", ")
+            const examples = fmt.generatedExamples ? createExamples(fmt) : fmt.examples
             return {
                 title: fmt.title,
                 description: fmt.description,
@@ -24,17 +24,26 @@ function buildFormats(jsons) {
     }));
 }
 
+function createExamples(fmt) {
+    if(fmt.type = "date") {
+        return genDateTimeExamples(fmt.formats).examples.join(", ")
+    } else {
+        console.log("Invalid example generation type")
+        return "Could not generate examples"
+    }
+}
+
 function createMessage(formats) {
     let msg  = "";
     let incr = 1;
-    let o = {};
     formats.forEach(f =>{
         const title = `${incr}. ${f.title}`
-        o[title] = formatFieldFormatter(f, incr);
+        msg += formatFormat(f, title);
+        msg += "\n\n"
         incr += 1;
     });
-    return simpleEmbedGen( o, 
-        title = "Here's the list of formats accepted by the bot." );
+    return simpleEmbedGen( { "\u200B" : msg }, 
+        title = "Formats accepted by the bot" );
 }
 
 exports.run = async (client, message, args, level) => { // eslint-disable-line no-unused-vars

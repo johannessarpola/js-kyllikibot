@@ -3,7 +3,7 @@
         "formats" :  ["{{date}} {{startTime}}-{{endTime}} ({{timeZone}}) {{summary}} {{description}} ({{id}})"]
     },
     "format" : {
-        "formats" : ["{{description}} \n\nExamples: {{examples}}"]
+        "formats" : ["**{{title}}**\n{{description}} \n\nExamples: {{examples}}"]
     },
     "visibility" : "internal"
 }

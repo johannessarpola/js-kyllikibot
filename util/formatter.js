@@ -24,8 +24,9 @@ module.exports.event = (event) => {
     return base;
 }
 
-module.exports.formatField = (fmt, ordering = 1) => {
+module.exports.formatFormat = (fmt, title = "") => {
     let base = formatFormat;
+    base = base.replace("{{title}}", title)
     base = base.replace("{{description}}", fmt.description)
     base = base.replace("{{examples}}", fmt.examples)
     base = base.replace("  ", " ");

@@ -24,7 +24,7 @@ module.exports.tryParseDateTime = (str) => {
     return returnDateIfValid(m);
 }
  
-module.exports.generateExamples = (formats) => {
+module.exports.generateExamples = (formats, type = "date") => {
     const cur = moment();
     const exs = formats.map(fmt => {
         return cur.format(fmt);
