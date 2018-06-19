@@ -1,4 +1,4 @@
-image: 10.1-alpine
+image: node:10.4-jessie
 
 all_tests:
   script:
