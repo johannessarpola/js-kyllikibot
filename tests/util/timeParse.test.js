@@ -1,7 +1,8 @@
 const timeParse = require("../../util/TimeParse");
 const chai = require("chai")
 
-chai.should();
+const should = chai.should();
+const expect = chai.expect;
 
 test("should parse hours from 17:00", () => {
     let time = timeParse.tryParseTime("17:00");
@@ -56,4 +57,15 @@ test("should parse date from 23-3-2018", () => {
     time.getDate().should.equal(23);
     time.getMonth().should.equal(2);
     time.getFullYear().should.equal(2018);
+});
+
+test("should generate examples with formats", () => {
+    let fmts = ["M/D/YYYY", "Hm"]
+    let gens = timeParse.generateExamples(fmts);
+    let date = gens.date;
+    let exs = gens.examples;
+
+    expect(exs).to.include(`${date.getHours()}${date.getMinutes()}`)
+    expect(exs).to.include(`${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`)
+    
 });

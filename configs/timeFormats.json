@@ -1,15 +1,32 @@
 {
-    "dateFormats" : [
-        "DD.MM.YYYY", "DD.M.YYYY", "D.M.YYYY",
-        "DD-MM-YYYY", "DD-M-YYYY", "D-M-YYYY"
-    ],
-    "timeFormats" : [
-        "HHmm", "HH:mm", "HH.mm"
-    ],
-    "dateTimeFormats" : [
-        "DDMMYYYYHHmm", "DD.MM.YYYYTHHmm"
-    ],
+    "date" : {
+        "title" : "Date",
+        "description" : "You can see in what format bot accepts dates in examples below.",
+        "formats": [ "DD.MM.YYYY", "DD.M.YYYY", "D.M.YYYY",
+        "DD-MM-YYYY", "DD-M-YYYY", "D-M-YYYY" ],
+        "visibility" : "user",
+        "type" : "date",
+        "generatedExamples" : true
+    },
+    "time" : {
+        "title" : "Time",
+        "description" : "You can see in what format bot accepts times in examples below.",
+        "formats" : [ "HHmm", "HH:mm", "HH.mm" ],
+        "visibility" : "user",
+        "type" : "date",
+        "generatedExamples" : true
+    },
+    "dateTime" : {
+        "title" : "DateTime",
+        "description" : "You can see in what format bot accepts dates and times in a single token in examples below.",
+        "formats" : [ "DDMMYYYYHHmm", "DD.MM.YYYYTHHmm" ],
+        "visibility" : "user",
+        "type" : "date",
+        "generatedExamples" : true
+    },
     "generalFormat" : "D.M.YYYY HHmm",
     "generalTimeFormat" : "HHmm",
-    "generalDateFormat" : "D.M.YYYY"
+    "generalDateFormat" : "D.M.YYYY",
+    "visibility" : "user",
+    "category" : "Date and time"
 }

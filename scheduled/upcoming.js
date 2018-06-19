@@ -1,5 +1,5 @@
 
-const formatEvent = require("../util/eventParse").formatEvent 
+const formatEvent = require("../util/formatter").event 
 
 exports.run = async (client, channel, args) => { // eslint-disable-line no-unused-vars
     const gcal = require('../services/gcalendar')
