@@ -1,4 +1,4 @@
-const timeParse = require("../../util/TimeParse");
+const timeParse = require("../../util/timeParse");
 const chai = require("chai")
 
 const should = chai.should();
