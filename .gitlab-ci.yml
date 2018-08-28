@@ -16,8 +16,8 @@ build_image:
   stage: release
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com 
-    - docker build -t registry.example.com/johannessarpola/kyllikkibot .
-    - docker run registry.example.com/johannessarpola/kyllikkibot/script/to/run/tests
-    - docker push registry.example.com/johannessarpola/kyllikkibot:latest
+    - docker build -t registry.gitlab.com/johannessarpola/kyllikkibot .
+    - docker run registry.gitlab.com/johannessarpola/kyllikkibot/script/to/run/tests
+    - docker push registry.gitlab.com/johannessarpola/kyllikkibot:latest
   only:
     - master
