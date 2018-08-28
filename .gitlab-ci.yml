@@ -1,6 +1,23 @@
 image: node:10.4-jessie
 
+stages:
+  - test
+  - release
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com 
+  - npm install
+
 all_tests:
+  stage: test
   script:
-   - npm install
    - npm test
+
+build_image:
+  stage: release
+  script:
+    - docker build -t registry.example.com/johannessarpola/kyllikkibot.
+    - docker run registry.example.com/johannessarpola/kyllikkibot/script/to/run/tests
+    - docker push registry.example.com/johannessarpola/kyllikkibot:latest
+  only:
+    - master
