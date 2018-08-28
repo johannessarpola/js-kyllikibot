@@ -1,4 +1,6 @@
-image: node:10.4-jessie
+image: docker:git
+services:
+  - docker:dind
 
 stages:
   - test
@@ -6,11 +8,12 @@ stages:
 
 before_script:
   - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com 
-  - npm install
 
-all_tests:
+tests:
+  image: node:10.4-jessie
   stage: test
   script:
+   - npm install
    - npm test
 
 build_image:
