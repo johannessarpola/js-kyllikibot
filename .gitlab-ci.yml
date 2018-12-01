@@ -3,7 +3,7 @@ stages:
   - release  
 
 tests:
-  image: node:10-alpine
+  image: node:10.4-jessie
   stage: test
   script:
    - npm install
