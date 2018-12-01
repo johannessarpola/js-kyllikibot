@@ -3,7 +3,7 @@ const gcal = require('../services/gcalendar')
 exports.run = async (client, message, args, level) => { // eslint-disable-line no-unused-vars
     const eventId = args.join("").replace("(", "").replace(")", "");
     const name = message.author.username;
-    gcal.participate(eventId, name, (event) => {
+    gcal.participate(client.config.services.google, eventId, name, (event) => {
       message.channel.send(`${name} participates in ${event.summary} (${event.id})`);
     })
   };

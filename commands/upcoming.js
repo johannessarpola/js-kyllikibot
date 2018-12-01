@@ -2,7 +2,7 @@ const formatEvent = require("../util/formatter").event
 
 exports.run = async (client, message, args, level) => { // eslint-disable-line no-unused-vars
     const gcal = require('../services/gcalendar')
-    const upcoming = gcal.upcoming(event => {
+    const upcoming = gcal.upcoming(client.config.services.google, event => {
         if(event.err) {
             message.channel.send(event.err)
         }

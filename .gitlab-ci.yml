@@ -3,20 +3,20 @@ stages:
   - release  
 
 tests:
-  image: node:10.4-jessie
+  image: node:10-alpine
   stage: test
   script:
    - npm install
    - npm test
 
-build_image:
-  image: docker:git
-  services:
-    - docker:dind
-  stage: release
-  script:
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com 
-    - docker build -t registry.gitlab.com/johannessarpola/kyllikkibot .
-    - docker push registry.gitlab.com/johannessarpola/kyllikkibot:latest
-  only:
-    - master
+# build_image:
+#   image: docker:git
+#   services:
+#     - docker:dind
+#   stage: release
+#   script:
+#     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com 
+#     - docker build -t registry.gitlab.com/johannessarpola/kyllikkibot .
+#     - docker push registry.gitlab.com/johannessarpola/kyllikkibot:latest
+#   only:
+#     - master

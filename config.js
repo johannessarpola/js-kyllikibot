@@ -1,8 +1,19 @@
-const credentials = require("./credentials/credentials.json")
+
+googleCredentials = () => {
+  const buf = Buffer.from(process.env.GOOGLE_SERVICE_ACCOUNT, 'base64'); 
+  const credentials = JSON.parse(buf);
+  return credentials;
+}
+
+
+googleCalendarId = () => {
+  return process.env.GOOGLE_CALENDAR_ID || '39aesjke4pr0spvelmbvfgevkc@group.calendar.google.com';
+}
+
 
 const config = {
   // Bot Owner, level 10 by default. A User ID. Should never be anything else than the bot owner's ID.
-  "ownerID": credentials.ownerId,
+  "ownerID": process.env.DISCORD_OWNER_ID,
 
   // Bot Admins, level 9 by default. Array of user ID strings.
   "admins": [],
@@ -11,7 +22,14 @@ const config = {
   "support": [],
 
   // Your Bot's Token. Available on https://discordapp.com/developers/applications/me
-  "token": credentials.token,
+  "token": process.env.DISCORD_BOT_TOKEN,
+
+  "services" : {
+    "google" : {
+      "calendarId" : googleCalendarId(),
+      "credentials" : googleCredentials(),
+    },
+  },
 
   // Default per-server settings. New guilds have these settings. 
 

@@ -1,6 +1,7 @@
 const {
     google
 } = require('googleapis');
+
 const JWT_TOKEN_PATH = 'credentials/google-jwt-token.json';
 const fs = require('fs')
 const calendarId = '39aesjke4pr0spvelmbvfgevkc@group.calendar.google.com'
@@ -64,7 +65,7 @@ function getAccessToken(jwtClient, callback) {
  * Lists the next 10 events on the user's primary calendar.
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
-function listEvents(auth, callback) {
+function listEvents(auth, calendarId, callback) {
     const calendar = calendarInstance(auth);
     calendar.events.list({
         calendarId: calendarId,
@@ -94,7 +95,7 @@ function listEvents(auth, callback) {
  * Lists the next 10 events on the user's primary calendar.
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
-function createEvent(auth, event, callback) {
+function createEvent(auth,calendarId, event, callback) {
     const calendar = calendarInstance(auth);
 
     calendar.events.insert({
@@ -108,7 +109,7 @@ function createEvent(auth, event, callback) {
 
 }
 
-function update(auth, event, callback) {
+function update(auth, calendarId, event, callback) {
     const calendar = calendarInstance(auth);
     calendar.events.update({
         calendarId: calendarId,
@@ -121,7 +122,7 @@ function update(auth, event, callback) {
     });
 }
 
-function get(auth, id, callback) {
+function get(auth, calendarId, id, callback) {
     const calendar = calendarInstance(auth);
     calendar.events.get({
         calendarId: calendarId,
@@ -133,10 +134,9 @@ function get(auth, id, callback) {
     });
 }
 
-module.exports.participate = (id, name, callback) => {
-    const credentials = require('../credentials/google-service-account.json')
-    return authorized(credentials, (auth) => {
-        get(auth, id, (event) => {
+module.exports.participate = (googleConfiguration, id, name, callback) => {
+    return authorized(googleConfiguration.credentials, (auth) => {
+        get(auth, googleConfiguration.calendarId, id, (event) => {
             const sanitizedName = name.replace(",", " ");
             const split = event.description ? event.description.split(",") : [];
             if(split.includes(sanitizedName)) {
@@ -150,17 +150,15 @@ module.exports.participate = (id, name, callback) => {
     });
 }
 
-module.exports.upcoming = (callback) => {
-    const credentials = require('../credentials/google-service-account.json')
-    return authorized(credentials, (auth) => {
-        listEvents(auth, callback)
+module.exports.upcoming = (googleConfiguration, callback) => {
+    return authorized(googleConfiguration.credentials, (auth) => {
+        listEvents(auth, googleConfiguration.calendarId, callback)
     });
 }
 
-module.exports.insert = (event, callback) => {
-    const credentials = require('../credentials/google-service-account.json')
-    return authorized(credentials, (auth) => {
-        createEvent(auth, event, callback)
+module.exports.insert = (googleConfiguration, event, callback) => {
+    return authorized(googleConfiguration.credentials, (auth) => {
+        createEvent(auth, googleConfiguration.calendarId, event, callback)
     });
 }
 
