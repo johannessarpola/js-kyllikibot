@@ -1,5 +1,5 @@
 # FROM arm32v7/node:10-slim
-FROM 10-alpine
+FROM node:10-alpine
 RUN apt-get update
 ENV TZ=Europe/Helsinki
 ENV DISCORD_BOT_TOKEN=$DISCORD_BOT_TOKEN
