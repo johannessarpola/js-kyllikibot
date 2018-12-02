@@ -1,6 +1,11 @@
 stages:
   - test
-  - release  
+  - release
+    
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+  - node_modules/
 
 tests:
   image: node:10.4-jessie
