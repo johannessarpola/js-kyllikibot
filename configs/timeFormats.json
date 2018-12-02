@@ -25,7 +25,7 @@
         "generatedExamples" : true
     },
     "generalFormat" : "D.M.YYYY HHmm",
-    "generalTimeFormat" : "HHmm",
+    "generalTimeFormat" : "HH:mm",
     "generalDateFormat" : "D.M.YYYY",
     "visibility" : "user",
     "category" : "Date and time"
