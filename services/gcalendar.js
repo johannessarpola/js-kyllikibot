@@ -73,11 +73,9 @@ function listEvents(auth, calendarId, callback) {
         maxResults: 10,
         singleEvents: true,
         orderBy: 'startTime',
-    }, (err, {
-        data
-    }) => {
+    }, (err, response) => {
         if (err) return console.log('The API returned an error: ' + err); // TODO Use logging
-        const events = data.items;
+        const events = response.data.items;
         if (events.length) {
             events.forEach((event, i) => {
                 callback(event)
@@ -95,7 +93,7 @@ function listEvents(auth, calendarId, callback) {
  * Lists the next 10 events on the user's primary calendar.
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
-function createEvent(auth,calendarId, event, callback) {
+function createEvent(auth, calendarId, event, callback) {
     const calendar = calendarInstance(auth);
 
     calendar.events.insert({
@@ -127,10 +125,8 @@ function get(auth, calendarId, id, callback) {
     calendar.events.get({
         calendarId: calendarId,
         eventId: id
-    }, (err, {
-        data
-    }) => {
-        callback(data);
+    }, (err, response) => {
+        callback(response.data);
     });
 }
 
@@ -144,7 +140,7 @@ module.exports.participate = (googleConfiguration, id, name, callback) => {
             }
             else {
                 event.description = event.description != null ? event.description + `,${sanitizedName}` : sanitizedName
-                update(auth, event, callback)
+                update(auth, googleConfiguration.calendarId, event, callback)
             }
         });
     });
@@ -161,10 +157,3 @@ module.exports.insert = (googleConfiguration, event, callback) => {
         createEvent(auth, googleConfiguration.calendarId, event, callback)
     });
 }
-
-
-//const credentials = require('../credentials/google-credentials.json')
-//authorize(credentials, (auth) => console.log(auth));
-// Poll events from Google every 15 minutes and compare the diff to current time
-// Emit event if there's upcoming event in e.g. 6 hours, 15 mins and so on (Separate module)
-//

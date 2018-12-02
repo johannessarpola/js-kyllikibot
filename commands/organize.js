@@ -56,7 +56,7 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
     const eventEnd = gevents.createTime(addDuration(date, duration))
 
      // TODO Handle description or title?
-    const event = gevents.createSimpleEvent(remainingArgs.join(" "), eventStart, eventEnd, "");
+    const event = gevents.createSimpleEvent(remainingArgs.join(" "), eventStart, eventEnd, message.author.username);
     const upcoming = gcal.insert(client.config.services.google, event, data => {
         message.channel.send(`Created event for ${data.start.dateTime} with title ${data.summary} (${data.id})`)
     });

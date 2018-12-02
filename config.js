@@ -1,4 +1,6 @@
 
+require('dotenv').config();
+
 googleCredentials = () => {
   const buf = Buffer.from(process.env.GOOGLE_SERVICE_ACCOUNT, 'base64'); 
   const credentials = JSON.parse(buf);

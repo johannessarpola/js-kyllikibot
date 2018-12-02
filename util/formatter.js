@@ -18,7 +18,11 @@ module.exports.event = (event) => {
     base = base.replace("{{summary}}", event.summary)
     // base = base.replace("{{description}}", event.description || "")
     base = base.replace("{{id}}", event.id)
-    base = base.replace("{{attendees}}", event.description.split(",").join(", "))
+    if(event.description != null) {
+        base = base.replace("{{attendees}}", event.description.split(",").join(", "))
+    } else {
+        base = base.replace("{{attendees}}", "none") 
+    } 
 
     base = base.replace("  ", " ");
 

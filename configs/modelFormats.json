@@ -1,6 +1,6 @@
 {
     "event" : {
-        "formats" :  ["{{date}} {{startTime}}-{{endTime}} ({{timeZone}}) {{summary}} ({{id}}). \nAttendees: {{attendees}}"]
+        "formats" :  ["-- Upcoming event --\nTitle: {{summary}}\nTime: {{date}} {{startTime}}-{{endTime}} ({{timeZone}})\nAttendees: {{attendees}}\nEvent id: {{id}}\n----"]
     },
     "format" : {
         "formats" : ["**{{title}}**\n{{description}} \n\nExamples: {{examples}}"]
