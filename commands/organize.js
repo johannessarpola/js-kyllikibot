@@ -54,7 +54,7 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
 
     const eventStart = gevents.createTime(date)
     const eventEnd = gevents.createTime(addDuration(date, duration))
-6
+    
      // TODO Handle description or title?
     const event = gevents.createSimpleEvent(remainingArgs.join(" "), eventStart, eventEnd, "");
     const upcoming = gcal.insert(client.config.services.google. event, data => {

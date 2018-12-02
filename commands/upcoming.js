@@ -23,7 +23,7 @@ exports.conf = {
 
 exports.help = {
     name: "upcoming",
-    category: "System",
+    category: "Events",
     description: "Lists upcoming events",
     usage: "upcoming"
 };
