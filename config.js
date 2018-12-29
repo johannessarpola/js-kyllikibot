@@ -1,16 +1,16 @@
 
-require('dotenv').config();
+require('dotenv').config("__dirname/.env");
 
 googleCredentials = () => {
   const buf = Buffer.from(process.env.GOOGLE_SERVICE_ACCOUNT, 'base64'); 
   const credentials = JSON.parse(buf);
   return credentials;
-}
+};
 
 
 googleCalendarId = () => {
   return process.env.GOOGLE_CALENDAR_ID || '39aesjke4pr0spvelmbvfgevkc@group.calendar.google.com';
-}
+};
 
 
 const config = {
