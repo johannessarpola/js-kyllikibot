@@ -21,10 +21,10 @@ playSound = (client, message, args) => {
           voiceChannel.channel.join().then((connection) => {
             const dispatcher = connection.play("./sounds/" + file);
             dispatcher.on('finish', (reason) => {
-              delayedAction(2000, connection.disconnect());
+              delayedAction(2000, () => connection.disconnect());
             });
           }).catch(err => {
-            delayedAction(2000, connection.disconnect());
+            delayedAction(2000, () => connection.disconnect());
             client.logger.error(err);
           });
         }
