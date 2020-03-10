@@ -1,6 +1,6 @@
 const fs = require('fs');
 const mp3duration = require("mp3-duration");
-const dcBufferSeconds = 2;
+const dcBufferSeconds = 3;
 
 delayedAction = (timeout, action) => {
   return new Promise((resolve) => {
@@ -23,7 +23,7 @@ playSound = (client, message, args) => {
               client.logger.error(err);
             } else {
               voiceChannel.join().then((connection) => {
-                delayedAction((duration + dcBufferSeconds) * 1000, () => voiceChannel.leave());
+                delayedAction((duration + dcBufferSeconds) * 100, () => voiceChannel.leave());
                 connection.playFile("./sounds/" + file);
               }).catch(err => {
                 voiceChannel.leave();
