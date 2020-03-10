@@ -23,7 +23,6 @@ playSound = (client, message, args) => {
               client.logger.error(err);
             } else {
               voiceChannel.join().then((connection) => {
-                delayedAction((duration + dcBufferSeconds) * 100, () => voiceChannel.leave());
                 connection.playFile("./sounds/" + file);
               }).catch(err => {
                 voiceChannel.leave();
