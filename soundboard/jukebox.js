@@ -11,27 +11,21 @@ delayedAction = (timeout, action) => {
 };
 
 playSound = (client, message, args) => {
-  const voiceChannel = message.member.voiceChannel;
+  const voiceChannel = message.member.voice;
   if (voiceChannel != null) {
     fs.readdir("./sounds/", (err, files) => {
       files.forEach(file => {
         fileName = file.split('.')[0];
         fileType = file.split('.')[1];
         if (args[0] === fileName) {
-          const timeout = mp3duration("./sounds/" + file, (err, duration) => {
-            if (err) {
-              client.logger.error(err);
-            } else {
-              voiceChannel.join().then((connection) => {
-                const dispatcher = connection.playFile("./sounds/" + file);
-                dispatcher.on('end', function () {
-                  voiceChannel.leave();
-                });
-              }).catch(err => {
-                voiceChannel.leave();
-                client.logger.error(err);
-              });
-            }
+          voiceChannel.channel.join().then((connection) => {
+            const dispatcher = connection.play("./sounds/" + file);
+            dispatcher.on('finish', (reason) => {
+              delayedAction(2000, connection.disconnect());
+            });
+          }).catch(err => {
+            delayedAction(2000, connection.disconnect());
+            client.logger.error(err);
           });
         }
       });
