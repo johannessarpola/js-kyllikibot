@@ -17,7 +17,7 @@ playSound = (client, message, args) => {
       files.forEach(file => {
         fileName = file.split('.')[0];
         fileType = file.split('.')[1];
-        if (args[0] === fileName) {
+        if (args[0] === fileName && voiceChannel.channel != null) {
           voiceChannel.channel.join().then((connection) => {
             const dispatcher = connection.play("./sounds/" + file);
             dispatcher.on('finish', (reason) => {
