@@ -11,7 +11,7 @@ delayedAction = (timeout, action) => {
 };
 
 playSound = (client, message, args) => {
-  const voiceChannel = message.member.voice.channel;
+  const voiceChannel = message.member.voiceChannel;
   if (voiceChannel != null) {
     fs.readdir("./sounds/", (err, files) => {
       files.forEach(file => {
@@ -24,7 +24,7 @@ playSound = (client, message, args) => {
             } else {
               voiceChannel.join().then((connection) => {
                 delayedAction((duration + dcBufferSeconds) * 1000, () => voiceChannel.leave());
-                connection.play("./sounds/" + file);
+                connection.playFile("./sounds/" + file);
               }).catch(err => {
                 voiceChannel.leave();
                 client.logger.error(err);
