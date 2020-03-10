@@ -15,6 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "abort-controller": "^3.0.0",
+    "async-limiter": "^2.0.0",
     "chalk": "^2.3.0",
     "discord.js": "github:discordjs/discord.js",
     "dotenv": "^6.2.0",
