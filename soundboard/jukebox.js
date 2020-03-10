@@ -23,7 +23,10 @@ playSound = (client, message, args) => {
               client.logger.error(err);
             } else {
               voiceChannel.join().then((connection) => {
-                connection.playFile("./sounds/" + file);
+                const dispatcher = connection.playFile("./sounds/" + file);
+                dispatcher.on('end', function () {
+                  voiceChannel.leave();
+                });
               }).catch(err => {
                 voiceChannel.leave();
                 client.logger.error(err);
