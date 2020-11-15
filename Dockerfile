@@ -1,5 +1,5 @@
 # FROM arm32v7/node:10-slim
-FROM node:10-alpine
+FROM node:15-alpine
 ENV TZ=Europe/Helsinki
 ENV DISCORD_BOT_TOKEN=$DISCORD_BOT_TOKEN
 ENV DISCORD_OWNER_ID=$DISCORD_OWNER_ID

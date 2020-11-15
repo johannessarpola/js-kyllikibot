@@ -6,7 +6,6 @@ const scheduling = require("./services/scheduler");
 const { promisify } = require("util");
 const readdir = promisify(require("fs").readdir);
 const Enmap = require("enmap");
-const EnmapLevel = require("enmap-level");
 
 const client = new Discord.Client();
 client.config = require("./config.js");
@@ -28,7 +27,7 @@ client.tasks = new Enmap();
 // Now we integrate the use of Evie's awesome Enhanced Map module, which
 // essentially saves a collection to disk. This is great for per-server configs,
 // and makes things extremely easy for this purpose.
-client.settings = new Enmap({provider: new EnmapLevel({name: "settings"})});
+client.settings = new Enmap();
 
 const init = async () => {
 
