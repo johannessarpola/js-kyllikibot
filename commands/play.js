@@ -41,6 +41,44 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
 	setTimeout(() => { disp.destroy(); voiceChannel.leave(); }, 10 * 60 * 1000);
 };
 
+function getSong(videoInfo) {
+	return {
+		title: videoInfo.videoDetails.title,
+		url: videoInfo.videoDetails.video_url,
+	};
+}
+
+function addToQueue(song, queueConstruct) {
+	queueConstruct.songs.push(song);
+}
+
+function removeFromQueue(queueConstruct) {
+	queueConstruct.songs.shift();
+}
+
+function getQueue(textChannel, voiceChannel) {
+	return {
+		textChannel: textChannel,
+		voiceChannel: voiceChannel,
+		connection: null,
+		songs: [],
+		volume: 5,
+		playing: true,
+	};
+}
+
+async function fetchInfo(url, times) {
+	try {
+		const info = await ytdl.getInfo(url);
+		return info;
+	}
+	catch (err) {
+		console.error(err);
+		if (times <= 5) {
+			return fetchInfo(url, ++times);
+		}
+	}
+}
 
 async function createStream(url, times) {
 	try {

@@ -7,27 +7,10 @@ const { promisify } = require('util');
 const readdir = promisify(require('fs').readdir);
 const Enmap = require('enmap');
 
-const client = new Discord.Client();
-client.config = require('./config.js');
-
-// Require our logger
-client.logger = require('./util/Logger');
-
-// Let's start by getting some useful functions that we'll use throughout
-// the bot, like logs and elevation features.
-require('./modules/functions.js')(client);
-
-// Aliases and commands are put in collections where they can be read from,
-// catalogued, listed, etc.
-client.commands = new Enmap();
-client.aliases = new Enmap();
-client.tasks = new Enmap();
-
 
 // Now we integrate the use of Evie's awesome Enhanced Map module, which
 // essentially saves a collection to disk. This is great for per-server configs,
 // and makes things extremely easy for this purpose.
-client.settings = new Enmap();
 
 async function loadCommands(client) {
 	// Here we load **commands** into memory, as a collection, so they're accessible here and everywhere else.
@@ -67,6 +50,25 @@ async function loadEvents(client) {
 }
 
 const init = async () => {
+
+	const client = new Discord.Client();
+	client.config = require('./config.js');
+
+	// Require our logger
+	client.logger = require('./util/Logger');
+
+	// Let's start by getting some useful functions that we'll use throughout
+	// the bot, like logs and elevation features.
+	require('./modules/functions.js')(client);
+
+	// Aliases and commands are put in collections where they can be read from,
+	// catalogued, listed, etc.
+	client.commands = new Enmap({ name: 'commands' });
+	client.aliases = new Enmap({ name: 'aliases' });
+	client.tasks = new Enmap({ name: 'tasks' });
+	client.musicQueues = new Enmap({ name: 'music-queues' });
+	client.settings = new Enmap({ name: 'settings' });
+
 
 	loadCommands(client);
 	loadTasks(client);
