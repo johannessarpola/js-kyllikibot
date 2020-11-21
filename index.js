@@ -29,8 +29,7 @@ client.tasks = new Enmap();
 // and makes things extremely easy for this purpose.
 client.settings = new Enmap();
 
-const init = async () => {
-
+async function loadCommands(client) {
 	// Here we load **commands** into memory, as a collection, so they're accessible here and everywhere else.
 	const cmdFiles = await readdir('./commands/');
 	client.logger.log(`Loading a total of ${cmdFiles.length} commands.`);
@@ -39,7 +38,21 @@ const init = async () => {
 		const response = client.loadCommand(f);
 		if (response) console.log(response);
 	});
+}
 
+async function loadTasks(client) {
+
+	const taskFiles = await readdir('./scheduled/');
+
+	taskFiles.forEach(f => {
+		if (!f.endsWith('.js')) return;
+		const response = client.loadScheduledTask(f);
+		if (response) console.log(response);
+	});
+
+}
+
+async function loadEvents(client) {
 	// Then we load events, which will include our message and ready event.
 	const evtFiles = await readdir('./events/');
 	client.logger.log(`Loading a total of ${evtFiles.length} events.`);
@@ -51,6 +64,14 @@ const init = async () => {
 		delete require.cache[require.resolve(`./events/${file}`)];
 	});
 
+}
+
+const init = async () => {
+
+	loadCommands(client);
+	loadTasks(client);
+	loadEvents(client);
+
 	// Generate a cache of client permissions for pretty perms
 	client.levelCache = {};
 	for (let i = 0; i < client.config.permLevels.length; i++) {
@@ -59,17 +80,9 @@ const init = async () => {
 	}
 
 	const schedulerSettings = {
-		guildId : '134603873187921920',
-		channelId : '134603873187921920',
+		guildId: '134603873187921920',
+		channelId: '134603873187921920',
 	};
-
-	const taskFiles = await readdir('./scheduled/');
-
-	taskFiles.forEach(f => {
-		if (!f.endsWith('.js')) return;
-		const response = client.loadScheduledTask(f);
-		if (response) console.log(response);
-	});
 
 	client.login(client.config.token).then(() => {
 		client.tasks.forEach((task) => {

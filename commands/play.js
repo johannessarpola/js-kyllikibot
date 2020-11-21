@@ -2,7 +2,7 @@ const ytdl = require('ytdl-core-discord');
 
 exports.run = async (client, message, args, level) => { // eslint-disable-line no-unused-vars
 
-	if(!client.songQueue) {
+	if (!client.songQueue) {
 		client.songQueue = [];
 	}
 
@@ -60,11 +60,11 @@ async function createStream(url, times) {
 
 function validURL(str) {
 	const pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
-      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-      '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-      '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-      '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+		'((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+		'((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+		'(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+		'(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+		'(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
 	return !!pattern.test(str);
 }
 
@@ -81,4 +81,9 @@ exports.help = {
 	category: 'Music',
 	description: 'Play music from Youtube on voice channel.',
 	usage: 'play',
+};
+
+exports.init = (client) => {
+
+
 };

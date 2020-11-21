@@ -34,6 +34,7 @@
     "ytdl-core-discord": "^1.2.4"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.12.1",
     "chai": "^4.1.2",
     "mocha": "^8.2.1"
   }

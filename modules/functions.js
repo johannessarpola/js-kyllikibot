@@ -1,14 +1,14 @@
 module.exports = (client) => {
 
 	/*
-  PERMISSION LEVEL FUNCTION
+	PERMISSION LEVEL FUNCTION
 
-  This is a very basic permission system for commands which uses "levels"
-  "spaces" are intentionally left black so you can add them if you want.
-  NEVER GIVE ANYONE BUT OWNER THE LEVEL 10! By default this can run any
-  command including the VERY DANGEROUS `eval` and `exec` commands!
+	This is a very basic permission system for commands which uses "levels"
+	"spaces" are intentionally left black so you can add them if you want.
+	NEVER GIVE ANYONE BUT OWNER THE LEVEL 10! By default this can run any
+	command including the VERY DANGEROUS `eval` and `exec` commands!
 
-  */
+	*/
 	client.permlevel = message => {
 		let permlvl = 0;
 
@@ -26,13 +26,13 @@ module.exports = (client) => {
 	};
 
 	/*
-  GUILD SETTINGS FUNCTION
+	GUILD SETTINGS FUNCTION
 
-  This function merges the default settings (from config.defaultSettings) with any
-  guild override you might have for particular guild. If no overrides are present,
-  the default settings are used.
+	This function merges the default settings (from config.defaultSettings) with any
+	guild override you might have for particular guild. If no overrides are present,
+	the default settings are used.
 
-  */
+	*/
 	client.getGuildSettings = (guild) => {
 		const def = client.config.defaultSettings;
 		if (!guild) return def;
@@ -45,17 +45,17 @@ module.exports = (client) => {
 	};
 
 	/*
-  SINGLE-LINE AWAITMESSAGE
+	SINGLE-LINE AWAITMESSAGE
 
-  A simple way to grab a single reply, from the user that initiated
-  the command. Useful to get "precisions" on certain things...
+	A simple way to grab a single reply, from the user that initiated
+	the command. Useful to get "precisions" on certain things...
 
-  USAGE
+	USAGE
 
-  const response = await client.awaitReply(msg, "Favourite Color?");
-  msg.reply(`Oh, I really love ${response} too!`);
+	const response = await client.awaitReply(msg, "Favourite Color?");
+	msg.reply(`Oh, I really love ${response} too!`);
 
-  */
+	*/
 	client.awaitReply = async (msg, question, limit = 60000) => {
 		const filter = m => m.author.id === msg.author.id;
 		await msg.channel.send(question);
@@ -70,16 +70,16 @@ module.exports = (client) => {
 
 
 	/*
-  MESSAGE CLEAN FUNCTION
+	MESSAGE CLEAN FUNCTION
 
-  "Clean" removes @everyone pings, as well as tokens, and makes code blocks
-  escaped so they're shown more easily. As a bonus it resolves promises
-  and stringifies objects!
-  This is mostly only used by the Eval and Exec commands.
-  */
+	"Clean" removes @everyone pings, as well as tokens, and makes code blocks
+	escaped so they're shown more easily. As a bonus it resolves promises
+	and stringifies objects!
+	This is mostly only used by the Eval and Exec commands.
+	*/
 	client.clean = async (client, text) => {
-		if (text && text.constructor.name == 'Promise') {text = await text;}
-		if (typeof evaled !== 'string') {text = require('util').inspect(text, { depth: 1 });}
+		if (text && text.constructor.name == 'Promise') { text = await text; }
+		if (typeof evaled !== 'string') { text = require('util').inspect(text, { depth: 1 }); }
 
 		text = text
 			.replace(/`/g, '`' + String.fromCharCode(8203))
@@ -148,13 +148,13 @@ module.exports = (client) => {
 
 	// <String>.toPropercase() returns a proper-cased string such as:
 	// "Mary had a little lamb".toProperCase() returns "Mary Had A Little Lamb"
-	String.prototype.toProperCase = function() {
-		return this.replace(/([^\W_]+[^\s-]*) */g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+	String.prototype.toProperCase = function () {
+		return this.replace(/([^\W_]+[^\s-]*) */g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
 	};
 
 	// <Array>.random() returns a single random element from an array
 	// [1, 2, 3, 4, 5].random() can return 1, 2, 3, 4 or 5.
-	Array.prototype.random = function() {
+	Array.prototype.random = function () {
 		return this[Math.floor(Math.random() * this.length)];
 	};
 
