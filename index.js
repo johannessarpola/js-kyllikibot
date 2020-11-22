@@ -66,7 +66,7 @@ const init = async () => {
 	client.commands = new Enmap({ name: 'commands' });
 	client.aliases = new Enmap({ name: 'aliases' });
 	client.tasks = new Enmap({ name: 'tasks' });
-	client.musicQueues = new Enmap({ name: 'music-queues' });
+	client.musicQueues = new Map();
 	client.settings = new Enmap({ name: 'settings' });
 
 

@@ -2,11 +2,13 @@ const ytdl = require('ytdl-core-discord');
 
 exports.run = async (client, message, args, level) => { // eslint-disable-line no-unused-vars
 
+
 	if (!client.songQueue) {
 		client.songQueue = [];
 	}
 
 	const voiceChannel = message.member.voice.channel;
+	const textChannel = message.channel;
 
 	if (!voiceChannel) {
 		return message.channel.send('You need to be in a voice channel to play music!');
@@ -21,25 +23,76 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
 		return message.channel.send('Only Youtube urls supported at the moment');
 	}
 
+
 	const url = message.content;
 	// TODO add queue functionality (https://gabrieltanner.org/blog/dicord-music-bot)
 	// client.songQueue.push(url);
 
-	const stream = await createStream(url, 0);
-	const disp = await voiceChannel.join()
-		.then(connection => {
-			const dispatcher = connection.play(stream, {
-				volume: 0.75,
-				type: 'opus',
-			})
-				.on('finish', () => { voiceChannel.leave(); })
-				.on('error', (e) => console.error(e));
-			return dispatcher;
-		});
+	const videoInfo = await fetchInfo(url, 0);
 
-	// Failsafe for stuck Kyllikki
-	setTimeout(() => { disp.destroy(); voiceChannel.leave(); }, 10 * 60 * 1000);
+
+	const guildId = message.guild.id;
+	let first = false;
+	let queue;
+	if (client.musicQueues.has(guildId)) {
+		queue = client.musicQueues.get(guildId);
+	}
+	else {
+		queue = createQueue(textChannel, voiceChannel);
+		client.musicQueues.set(guildId, queue);
+		first = true;
+	}
+
+	const song = getSong(videoInfo);
+	addToQueue(song, queue);
+
+	if(first) {
+		try {
+			const connection = await voiceChannel.join();
+			queue.connection = connection;
+			play(queue, () => {
+				voiceChannel.leave();
+				client.musicQueues.delete(guildId);
+			});
+		}
+		catch (err) {
+			console.log(err);
+			client.musicQueues.delete(message.guild.id);
+			return;
+		}
+	}
+
 };
+
+async function playInternal(connection, url) {
+	const stream = await createStream(url, 0);
+	const dispatcher = connection.play(stream, {
+		type: 'opus',
+	});
+	return dispatcher;
+}
+
+async function play(guildQueue, onComplete) {
+	const song = guildQueue.songs[0];
+	const voiceConnection = guildQueue.connection;
+	if (!song) {
+		onComplete();
+		return;
+	}
+
+	const dispatcher = await playInternal(voiceConnection, song.url);
+	// TODO
+	// dispatcher.setVolumeLogarithmic(guildQueue.volume / 5);
+	dispatcher.on('finish', () => {
+		removeFromQueue(guildQueue);
+		play(guildQueue, onComplete);
+	})
+		.on('error', error => console.error(error));
+
+
+	guildQueue.textChannel.send(`Started playing: **${song.title}**`);
+}
+
 
 function getSong(videoInfo) {
 	return {
@@ -56,7 +109,7 @@ function removeFromQueue(queueConstruct) {
 	queueConstruct.songs.shift();
 }
 
-function getQueue(textChannel, voiceChannel) {
+function createQueue(textChannel, voiceChannel) {
 	return {
 		textChannel: textChannel,
 		voiceChannel: voiceChannel,
@@ -119,9 +172,4 @@ exports.help = {
 	category: 'Music',
 	description: 'Play music from Youtube on voice channel.',
 	usage: 'play',
-};
-
-exports.init = (client) => {
-
-
 };
