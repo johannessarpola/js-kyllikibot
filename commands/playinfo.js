@@ -1,4 +1,4 @@
-const ytdl = require('ytdl-core-discord');
+const ytdl = require('discord-ytdl-core');
 
 exports.run = async (client, message, args, level) => { // eslint-disable-line no-unused-vars
 

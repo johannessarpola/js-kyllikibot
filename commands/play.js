@@ -1,4 +1,4 @@
-const ytdl = require('ytdl-core-discord');
+const ytdl = require('discord-ytdl-core');
 
 exports.run = async (client, message, args, level) => { // eslint-disable-line no-unused-vars
 
@@ -25,14 +25,10 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
 
 
 	const url = message.content;
-	// TODO add queue functionality (https://gabrieltanner.org/blog/dicord-music-bot)
-	// client.songQueue.push(url);
-
 	const videoInfo = await fetchInfo(url, 0);
 
 
 	const guildId = message.guild.id;
-	let first = false;
 	let queue;
 	if (client.musicQueues.has(guildId)) {
 		queue = client.musicQueues.get(guildId);
@@ -40,26 +36,28 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
 	else {
 		queue = createQueue(textChannel, voiceChannel);
 		client.musicQueues.set(guildId, queue);
-		first = true;
 	}
 
+	let connection;
 	const song = getSong(videoInfo);
 	addToQueue(song, queue);
 
-	if(first) {
-		try {
-			const connection = await voiceChannel.join();
+	try {
+		if (queue.connection == null) {
+			connection = await voiceChannel.join();
 			queue.connection = connection;
 			play(queue, () => {
-				voiceChannel.leave();
 				client.musicQueues.delete(guildId);
+				queue.connection.leave();
+				queue.connection = null;
 			});
 		}
-		catch (err) {
-			console.log(err);
-			client.musicQueues.delete(message.guild.id);
-			return;
-		}
+	}
+	catch (err) {
+		console.log(err);
+		connection.leave();
+		client.musicQueues.delete(message.guild.id);
+		return;
 	}
 
 };
