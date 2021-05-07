@@ -24,45 +24,45 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
 	}
 
 
-	const url = message.content;
-	const videoInfo = await fetchInfo(url, 0);
+	if (message.content != undefined && message.content.split(' ').length > 0) {
+		const url = message.content.split(" ")[1];
+		const videoInfo = await fetchInfo(url, 0);
 
+		const guildId = message.guild.id;
+		let queue;
+		if (client.musicQueues.has(guildId)) {
+			queue = client.musicQueues.get(guildId);
+		}
+		else {
+			queue = createQueue(textChannel, voiceChannel);
+			client.musicQueues.set(guildId, queue);
+		}
 
-	const guildId = message.guild.id;
-	let queue;
-	if (client.musicQueues.has(guildId)) {
-		queue = client.musicQueues.get(guildId);
-	}
-	else {
-		queue = createQueue(textChannel, voiceChannel);
-		client.musicQueues.set(guildId, queue);
-	}
+		let connection;
+		const song = getSong(videoInfo);
+		addToQueue(song, queue);
 
-	let connection;
-	const song = getSong(videoInfo);
-	addToQueue(song, queue);
-
-	try {
-		if (queue.connection == null) {
-			connection = await voiceChannel.join();
-			queue.connection = connection;
-			play(queue, () => {
-				client.musicQueues.delete(guildId);
-				queue.connection.leave();
-				queue.connection = null;
-			});
+		try {
+			if (queue.connection == null) {
+				connection = await voiceChannel.join();
+				queue.connection = connection;
+				play(queue, () => {
+					client.musicQueues.delete(guildId);
+					queue.connection.channel.leave(); //  queue.connection.leave is not a function 
+					queue.connection = null;
+				});
+			}
+		}
+		catch (err) {
+			console.log(err);
+			connection.leave();
+			client.musicQueues.delete(message.guild.id);
+			return;
 		}
 	}
-	catch (err) {
-		console.log(err);
-		connection.leave();
-		client.musicQueues.delete(message.guild.id);
-		return;
-	}
-
 };
 
-async function playInternal(connection, url) {
+async function createStreamDispatcher(connection, url) {
 	const stream = await createStream(url, 0);
 	const dispatcher = connection.play(stream, {
 		type: 'opus',
@@ -78,16 +78,18 @@ async function play(guildQueue, onComplete) {
 		return;
 	}
 
-	const dispatcher = await playInternal(voiceConnection, song.url);
-	// TODO
-	// dispatcher.setVolumeLogarithmic(guildQueue.volume / 5);
-	dispatcher.on('finish', () => {
-		removeFromQueue(guildQueue);
-		play(guildQueue, onComplete);
-	})
-		.on('error', error => console.error(error));
+	const playDispatcher = await createStreamDispatcher(voiceConnection, song.url);
+	
+	playDispatcher
+		.on('finish', () => {
+			next(guildQueue, onComplete);
+		})
+		.on('error', error => console.error(error))
+		.on('skip', () => {
+			next(guildQueue, onComplete);
+		});
 
-
+	guildQueue.dispatcher = playDispatcher;
 	guildQueue.textChannel.send(`Started playing: **${song.title}**`);
 }
 
@@ -97,6 +99,11 @@ function getSong(videoInfo) {
 		title: videoInfo.videoDetails.title,
 		url: videoInfo.videoDetails.video_url,
 	};
+}
+
+function next(queue, onComplete) {
+	removeFromQueue(queue);
+	play(queue, onComplete);
 }
 
 function addToQueue(song, queueConstruct) {
@@ -167,7 +174,7 @@ exports.conf = {
 
 exports.help = {
 	name: 'play',
-	category: 'Music',
+	category: 'Jukebox',
 	description: 'Play music from Youtube on voice channel.',
 	usage: 'play',
 };
